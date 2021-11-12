@@ -1,0 +1,23 @@
+{
+  "name": "advertisements-board",
+  "version": "1.0.0",
+  "description": "node.js express app",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "nodemon -L src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swhistle/advertisements-board.git"
+  },
+  "author": "Alexander S.",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

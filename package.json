@@ -12,5 +12,12 @@
     "url": "https://github.com/swhistle/advertisements-board.git"
   },
   "author": "Alexander S.",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }

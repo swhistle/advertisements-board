@@ -1,24 +1,14 @@
 const express = require('express');
-const {Schema, model, connect} = require('mongoose');
+const {connect} = require('mongoose');
+
+const advertisementsApiRouter = require('./routes/api/advertisements');
 
 const PORT = process.env.PORT || 3000;
 const UserDB = process.env.DB_USERNAME || 'root';
 const PasswordDB = process.env.DB_PASSWORD || 'password123';
 const NameDB = process.env.DB_NAME || 'advertisements_board';
+
 const HostDB = process.env.DB_HOST || 'mongo://localhost:27017';
-
-const advertisementScheme = Schema({
-   shortText: {
-      type: String,
-      required: true,
-   },
-   description: {
-      type: String,
-      required: true,
-   }
-});
-
-const Advertisement = model('Advertisement', advertisementScheme);
 
 connect(HostDB, {
    user: UserDB,
@@ -32,15 +22,7 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/api/advertisements', async (req, res) => {
-   const advertisementList = await Advertisement.find().select('-__v');
-
-   try {
-      res.send(advertisementList);
-   } catch (e) {
-      console.log(e);
-      res.status(500);
-   }
-});
+app.get('/', (req, res) => res.redirect('/api/advertisements'));
+app.use('/api/advertisements', advertisementsApiRouter);
 
 app.listen(PORT);

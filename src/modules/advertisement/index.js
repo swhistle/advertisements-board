@@ -1,6 +1,6 @@
-const AdvertisementScheme = require('../../schemes/advertisement');
+const AdvertisementScheme = require('../../models/advertisement');
 
-class Advertisement {
+class AdvertisementModule {
     static async getList(params) {
         return AdvertisementScheme.find(params);
     }
@@ -10,4 +10,4 @@ class Advertisement {
     }
 }
 
-module.exports = Advertisement;
+module.exports = AdvertisementModule;

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const Advertisement = require('../../../models/modules/advertisement');
+const AdvertisementModule = require('../../../modules/advertisement');
 const formattedData = require('../../../utils/formattedData');
 
 router.get('/', async (req, res) => {
     const params = req.query;
-    const advertisementList = await Advertisement.getList(params);
+    const advertisementList = await AdvertisementModule.getList(params);
 
     try {
         res.send(formattedData(advertisementList));
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const {id} = req.params;
-    const advertisementItem = await Advertisement.getItemById(id);
+    const advertisementItem = await AdvertisementModule.getItemById(id);
 
     try {
         res.send(formattedData(advertisementItem));

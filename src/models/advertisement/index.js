@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-const advertisementScheme = Schema(
+const advertisementSchema = Schema(
     {
         shortText: {
             type: String,
@@ -23,4 +23,4 @@ const advertisementScheme = Schema(
 
     );
 
-module.exports = model('Advertisement', advertisementScheme);
+module.exports = model('Advertisement', advertisementSchema);

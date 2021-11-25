@@ -3,6 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 
 const UserModule = require('../../../modules/user');
+const formattedData = require('../../../utils/formattedData');
 
 router.get('/signin', (req, res) => {
     res.send('signin');
@@ -79,7 +80,7 @@ router.get('/profile', (req, res, next) => {
             contactPhone: req.user.contactPhone,
         };
 
-        res.send(`user: ${JSON.stringify(userData)}`);
+        res.send(formattedData(userData));
     });
 
 module.exports = router;

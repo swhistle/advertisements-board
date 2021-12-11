@@ -4,7 +4,9 @@ const router = express.Router();
 const AdvertisementModule = require('../../../modules/advertisement');
 const formattedData = require('../../../utils/formattedData');
 const formattedError = require('../../../utils/formattedError');
+const isAuthenticated = require('../../../callbacks/checkAuth');
 
+// public api
 router.get('/', async (req, res) => {
     const params = req.query;
     const advertisementList = await AdvertisementModule.getList(params);
@@ -16,27 +18,6 @@ router.get('/', async (req, res) => {
     }
 
     res.send(formattedData(advertisementList));
-});
-
-router.post('/', async (req, res) => {
-    const {shortText, description} = req.body;
-
-    if (!shortText || !description) {
-        res.status(400);
-        res.send(formattedError("Fields 'shortText', 'description' shouldn't be empty"));
-        return;
-    }
-
-    const newAdvertisement = await AdvertisementModule.create(shortText, description);
-
-    if (!newAdvertisement) {
-        res.status(500);
-        res.send(formattedError('Server error'));
-        return;
-    }
-
-    res.status(201);
-    res.send(formattedData(newAdvertisement));
 });
 
 router.get('/:id', async (req, res) => {
@@ -52,35 +33,66 @@ router.get('/:id', async (req, res) => {
     res.send(formattedData(advertisementItem));
 });
 
-router.put('/:id', async (req, res) => {
-    const {id} = req.params;
-    const {shortText, description} = req.body;
+// private api
+router.post(
+    '/',
+    isAuthenticated,
+    async (req, res) => {
+        const {shortText, description} = req.body;
 
-    const advertisementItemForUpdate = await AdvertisementModule.update(id, {shortText, description});
+        if (!shortText || !description) {
+            res.status(400);
+            res.send(formattedError("Fields 'shortText', 'description' shouldn't be empty"));
+            return;
+        }
 
-    if (!advertisementItemForUpdate) {
-        res.status(404);
-        res.send(formattedError("Advertisement with this 'id' is not found"));
-        return;
-    }
+        const newAdvertisement = await AdvertisementModule.create(shortText, description);
 
-    res.status(202);
-    res.send(true);
+        if (!newAdvertisement) {
+            res.status(500);
+            res.send(formattedError('Server error'));
+            return;
+        }
+
+        res.status(201);
+        res.send(formattedData(newAdvertisement));
 });
 
-router.delete('/:id', async (req, res) => {
-    const {id} = req.params;
+router.put(
+    '/:id',
+    isAuthenticated,
+    async (req, res) => {
+        const {id} = req.params;
+        const {shortText, description} = req.body;
 
-    const advertisementItemForRemove = await AdvertisementModule.remove(id);
+        const advertisementItemForUpdate = await AdvertisementModule.update(id, {shortText, description});
 
-    if (!advertisementItemForRemove) {
-        res.status(404);
-        res.send(formattedError("Advertisement with this 'id' is not found"));
-        return;
-    }
+        if (!advertisementItemForUpdate) {
+            res.status(404);
+            res.send(formattedError("Advertisement with this 'id' is not found"));
+            return;
+        }
 
-    res.status(201);
-    res.send(true);
+        res.status(202);
+        res.send(true);
+});
+
+router.delete(
+    '/:id',
+    isAuthenticated,
+    async (req, res) => {
+        const {id} = req.params;
+
+        const advertisementItemForRemove = await AdvertisementModule.remove(id);
+
+        if (!advertisementItemForRemove) {
+            res.status(404);
+            res.send(formattedError("Advertisement with this 'id' is not found"));
+            return;
+        }
+
+        res.status(201);
+        res.send(true);
 });
 
 module.exports = router;

@@ -3,6 +3,8 @@ const passport = require('passport');
 const router = express.Router();
 
 const UserModule = require('../../../modules/user');
+const formattedData = require('../../../utils/formattedData');
+const isAuthenticated = require('../../../callbacks/checkAuth');
 
 router.get('/signin', (req, res) => {
     res.send('signin');
@@ -62,15 +64,9 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-router.get('/profile', (req, res, next) => {
-        if (!req.isAuthenticated || !req.isAuthenticated()) {
-            if (req.session) {
-                req.session.returnTo = req.originalUrl || req.url;
-            }
-            return res.redirect('/api/user/signin');
-        }
-        next();
-    },
+router.get(
+    '/profile',
+    isAuthenticated,
     (req, res) => {
         const userData = {
             id: req.user.id,
@@ -79,7 +75,7 @@ router.get('/profile', (req, res, next) => {
             contactPhone: req.user.contactPhone,
         };
 
-        res.send(`user: ${JSON.stringify(userData)}`);
+        res.send(formattedData(userData));
     });
 
 module.exports = router;

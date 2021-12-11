@@ -2,11 +2,52 @@ const AdvertisementScheme = require('../../models/advertisement');
 
 class AdvertisementModule {
     static async getList(params) {
-        return AdvertisementScheme.find(params);
+        try {
+            return await AdvertisementScheme.find(params);
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
     }
 
     static async getItemById(id) {
-        return AdvertisementScheme.findById(id);
+        try {
+            return await AdvertisementScheme.findById(id);
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    static async create(shortText, description) {
+        try {
+            const newAdvertisement = new AdvertisementScheme({shortText, description});
+
+            return newAdvertisement.save();
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    static async remove(id) {
+        try {
+            return await AdvertisementScheme.findByIdAndDelete(id);
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    static async update(id, params) {
+        try {
+            return await AdvertisementScheme.findByIdAndUpdate(id, {
+                ...params,
+            });
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
     }
 }
 

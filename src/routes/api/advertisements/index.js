@@ -52,11 +52,26 @@ router.get('/:id', async (req, res) => {
     res.send(formattedData(advertisementItem));
 });
 
+router.put('/:id', async (req, res) => {
+    const {id} = req.params;
+    const {shortText, description} = req.body;
+
+    const advertisementItemForUpdate = await AdvertisementModule.update(id, {shortText, description});
+
+    if (!advertisementItemForUpdate) {
+        res.status(404);
+        res.send(formattedError("Advertisement with this 'id' is not found"));
+        return;
+    }
+
+    res.status(202);
+    res.send(true);
+});
+
 router.delete('/:id', async (req, res) => {
     const {id} = req.params;
 
     const advertisementItemForRemove = await AdvertisementModule.remove(id);
-    console.log('advertisementItemForRemove', advertisementItemForRemove);
 
     if (!advertisementItemForRemove) {
         res.status(404);

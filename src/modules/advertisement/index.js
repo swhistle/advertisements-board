@@ -38,6 +38,17 @@ class AdvertisementModule {
             return null;
         }
     }
+
+    static async update(id, params) {
+        try {
+            return await AdvertisementScheme.findByIdAndUpdate(id, {
+                ...params,
+            });
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
 }
 
 module.exports = AdvertisementModule;

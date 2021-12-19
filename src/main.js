@@ -9,18 +9,14 @@ const UserModule = require('./modules/user');
 const userRouter = require('./routes/api/user');
 const advertisementsApiRouter = require('./routes/api/advertisements');
 
-const PORT = process.env.PORT || 3000;
-const UserDB = process.env.DB_USERNAME || 'root';
-const PasswordDB = process.env.DB_PASSWORD || 'password123';
-const NameDB = process.env.DB_NAME || 'advertisements_board';
+const PORT = 3000;
 const CookieSecret = process.env.COOKIE_SECRET;
+const NameDB = process.env.DB_NAME;
+const PasswordDB = process.env.DB_PASSWORD;
 
-const HostDB = process.env.DB_HOST || 'mongo://localhost:27017';
+const HostDB = `mongodb+srv://swhistle:${PasswordDB}@cluster0.lncey.mongodb.net/${NameDB}?retryWrites=true&w=majority`;
 
 mongoose.connect(HostDB, {
-   user: UserDB,
-   pass: PasswordDB,
-   dbName: NameDB,
    useNewUrlParser: true,
    useUnifiedTopology: true
 });
@@ -51,7 +47,7 @@ passport.serializeUser(function (user, cb) {
 
 passport.deserializeUser(UserModule.findById);
 
-//  Добавление стратегии для использования
+// Добавление стратегии для использования
 passport.use('local', new LocalStrategy(options, UserModule.verify));
 
 app.get('/', (req, res) => res.redirect('/api/advertisements'));
